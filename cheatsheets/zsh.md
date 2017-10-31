@@ -25,6 +25,7 @@ What you need to know to use ZSH.
 | *var*=*value* | NAME="Phil" | Set *var* to *value* in the session (the script or terminal) |
 | $*var* or "$*var*" or "${*var*}" | echo $NAME "$NAME" "${NAME}" | Returns the value of the variable *var* |
 | $(*cmd*) | echo "My location: $(pwd)" | Executes *cmd* and returns the result. |
+| vared *var* | vared NAME | Edit the variable *var* in-line |
 
 ## Replacements & Expansions
 Some expressions are simply stand-ins that are replaced by other values.
@@ -35,3 +36,8 @@ Some expressions are simply stand-ins that are replaced by other values.
 | !* | ls !* | replaced with last command's parameters (ls -l -a) |
 | !^ | ls !^ | replaced with last command's first parameter (ls -l) |
 | !$ | ls !$ | replaced with last command's last parameter (ls -a) |
+| !*str* | !l | replaced with last command beginning with *str* (ls -a) |
+| !?*str* | !?udo | replaced with last command containing *str* (sudo ls) |
+
+## Recommendations
+It seems like these days zsh has become zsh + oh-my-zsh. I recommend you at least try it out, it has some nice benefits over the basic terminal.
