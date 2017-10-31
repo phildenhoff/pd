@@ -40,4 +40,4 @@ Some expressions are simply stand-ins that are replaced by other values.
 | !?*str* | !?udo | replaced with last command containing *str* (sudo ls) |
 
 ## Recommendations
-It seems like these days zsh has become zsh + oh-my-zsh. I recommend you at least try it out, it has some nice benefits over the basic terminal.
+It seems like these days zsh has become zsh + oh-my-zsh. I recommend you at least try it out [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh), it has some nice benefits over the basic terminal.
