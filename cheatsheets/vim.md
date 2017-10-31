@@ -1,4 +1,5 @@
 # vim | cheatsheet
+[home](../readme.md)
 
 ## Basic Commands
 
