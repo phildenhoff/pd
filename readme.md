@@ -1,9 +1,29 @@
 # pd
-A personal git repository.
+A personal git repository for storing dotfiles & cheatsheets.
 
 ## Dot files
-[vimrc](dotfiles/.vimrc)
+[vimrc](dotfiles/.vimrc)  
+[zshrc](dotfiles/.zshrc)  
+[tmux.conf](dotfiles/.tmux.conf)  
+
+### Installing
+To actually use the dotfiles that are provded, I've written a quick installer script. It just makes symbolic links from the repo to your home directory, so if you `git pull` any new changes they're applied to your system automatically.
+`git clone` this repository and then `cd` into it with
+
+```
+git clone https://github.com/phildenhoff/pd.git
+cd pd
+```
+
+Then, run the installer script in dotfiles/ with
+
+```
+bash dotfiles/setup.sh
+```
+
+You'll now see the files represented in your home directory, as symbolic links.
 
 ## Cheatsheets
-[vim](cheatsheets/vim.md)
-
+[vim](cheatsheets/vim.md)  
+[zsh](cheatsheets/zsh.md)  
+[linux](cheatsheets/linux.md)  
