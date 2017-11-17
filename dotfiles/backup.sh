@@ -1,5 +1,18 @@
+#!/bin/bash
+
+# Check for internet conectivity
+wget -q --tries=10 --timeout=20 --spider http://google.com
+if [[ $? -eq 0 ]]; then
+    echo "Online"
+else
+    echo "Backup Aborted; No internet connection."
+    notify-send "Backup Aborted; No internet connection."
+    exit 1
+fi
+
 echo "Archive & compress home directory"
-tar -cpzf backup.tar.gz --exclude=*backup.tar.gz --exclude=backup-split-* --one-file-system /home/phil
+tar -cpzf backup.tar.gz --exclude=*backup.tar.gz --exclude=backup-split-* /
+    --one-file-system /home/phil
 echo "Split archive"
 split -b 50M backup.tar.gz backup-split-
 echo "Upload archives to Google Drive"
