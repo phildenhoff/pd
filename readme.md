@@ -23,6 +23,10 @@ bash dotfiles/setup.sh
 
 You'll now see the files represented in your home directory, as symbolic links.
 
+You'll need to install [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh),
+[vim-plug](https://github.com/junegunn/vim-plug), and the
+[pyte](https://github.com/therubymug/vim-pyte) vim theme.
+
 ## Cheatsheets
 [vim](cheatsheets/vim.md)  
 [zsh](cheatsheets/zsh.md)  

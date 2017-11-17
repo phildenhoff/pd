@@ -66,7 +66,7 @@ export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/Devel
 
 # Add NPM and NOD to path
-export PATH=$HOME/bin:/usr/local/bin:/usr/local/share/npm/bin:$PATH
+export PATH=~/.npm-global/bin:$PATH
 export WORKON_HOME=/home/phil/.virtualenvs
 export PROJECT_HOME=/home/phil/Devel
 [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"

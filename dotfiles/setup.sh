@@ -12,6 +12,6 @@ if [ "~/.tmux.conf" ]; then
     mv ~/.tmux.conf ~/.tmux.conf.bak
 fi
 
-ln ./.zshrc ~/.zshrc
-ln ./.tmux.conf ~/.tmux.conf
-ln ./.vimrc ~/.vimrc
+ln .zshrc ~/.zshrc
+ln .tmux.conf ~/.tmux.conf
+ln .vimrc ~/.vimrc
