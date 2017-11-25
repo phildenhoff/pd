@@ -1,2 +1,3 @@
 # Ignore vim Undo files
 *.un~
+*.swp
