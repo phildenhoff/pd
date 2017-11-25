@@ -1,4 +1,5 @@
 #!/bin/bash
+DATE="$(date +%Y-%b-%d)"
 
 # Check for internet conectivity
 wget -q --tries=10 --timeout=20 --spider http://google.com
@@ -10,13 +11,19 @@ else
     exit 1
 fi
 
-echo "Archive & compress home directory"
-tar -cpzf backup.tar.gz --exclude=*backup.tar.gz --exclude=backup-split-* /
-    --one-file-system /home/phil
+if [ ! -e backup.tar.gz ]; then
+    echo "Downloading newest exclusion list"
+    wget -q https://raw.githubusercontent.com/rubo77/rsync-homedir-excludes/master/rsync-homedir-excludes.txt -O /var/tmp/ignorelist
+    echo "Archive & compress home directory"
+    tar -cpzf backup.tar.gz --exclude=*backup.tar.gz --exclude=backup-split-* --exclude-from=/var/tmp/ignorelist --one-file-system /home/phil
+else
+    echo "Backup already exists"
+fi
+
 echo "Split archive"
-split -b 50M backup.tar.gz backup-split-
+split -b 100M backup.tar.gz backup-split-
 echo "Upload archives to Google Drive"
-rclone copy -v . --include "backup-split-*" gdrive:/gambit-backup/split/2017november17
+rclone copy -v --stats 10s . --include "backup-split-*" gdrive:/gambit-backup/split/"${DATE}"
 
 if [ $? -eq 0 ]; then
     echo "Upload completed successfully."
