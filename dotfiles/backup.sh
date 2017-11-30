@@ -20,6 +20,7 @@ else
     echo "Backup already exists"
 fi
 
+echo "Size: $(du -sh backup.tar.gz)"
 echo "Split archive"
 split -b 100M backup.tar.gz backup-split-
 echo "Upload archives to Google Drive"

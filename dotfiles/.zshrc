@@ -1,11 +1,15 @@
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/phil/.oh-my-zsh
+export ZSH=/home/phil/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# ZSH_THEME="hyperzsh"
-ZSH_THEME="agnoster"
+# ZSH_THEME="spaceship"
+ZSH_THEME="geometry/geometry"
+
+# Report exit codes so I can see if my last thing failed
+SPACESHIP_EXIT_CODE_SHOW="true"
+SPACESHIP_EXIT_CODE_SYMBOL="X"
 
 # Uncomment the following line to enable command auto-correction.
 ENABLE_CORRECTION="true"
@@ -28,12 +32,7 @@ export EDITOR='vim'
 # ssh
 export SSH_KEY_PATH="~/.ssh/id_rsa"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
+# Regular aliases
 alias v='vim'
 alias cls='clear'
 alias agi='apt-get install'
@@ -76,3 +75,5 @@ export GOPATH=$HOME/work
 # Run SSH-Agent and add github key
 eval `ssh-agent` &>> /dev/null
 ssh-add $HOME/.ssh/github_rsa &>> /dev/null
+
+source "/home/phil/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
