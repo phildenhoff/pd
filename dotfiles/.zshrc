@@ -72,8 +72,13 @@ export PROJECT_HOME=/home/phil/Devel
 export PATH=$PATH:/usr/local/go/bin
 export GOPATH=$HOME/work
 
+# Add local bin
+export PATH=~/.local/bin:$PATH
+
 # Run SSH-Agent and add github key
 eval `ssh-agent` &>> /dev/null
 ssh-add $HOME/.ssh/github_rsa &>> /dev/null
 
 source "/home/phil/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
+
+eval $(thefuck --alias)
