@@ -39,6 +39,7 @@ alias agi='apt-get install'
 alias sudo='sudo '
 alias here='(nautilus --browser . &) > /dev/null 2>&1'
 eval $(thefuck --alias dammit)
+alias logout='sudo pkill -u ${USER}'
 
 # Apt-Get
 alias agi='apt-get install'
@@ -77,8 +78,6 @@ export PATH=~/.local/bin:$PATH
 
 # Run SSH-Agent and add github key
 eval `ssh-agent` &>> /dev/null
-ssh-add $HOME/.ssh/github_rsa &>> /dev/null
+ssh-add $HOME/.ssh/gh_rsa &>> /dev/null
 
 source "/home/phil/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
-
-eval $(thefuck --alias)
