@@ -5,6 +5,7 @@ A personal git repository for storing dotfiles & cheatsheets.
 [vimrc](dotfiles/.vimrc)  
 [zshrc](dotfiles/.zshrc)  
 [tmux.conf](dotfiles/.tmux.conf)  
+[rc.xml](dotfiles/rc.xml)
 
 ### Installing
 To actually use the dotfiles that are provded, I've written a quick installer script. It just makes symbolic links from the repo to your home directory, so if you `git pull` any new changes they're applied to your system automatically.
@@ -31,3 +32,4 @@ You'll need to install [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh),
 [vim](cheatsheets/vim.md)  
 [zsh](cheatsheets/zsh.md)  
 [linux](cheatsheets/linux.md)  
+[openbox](cheatsheets/openbox.md)  

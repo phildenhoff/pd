@@ -15,3 +15,4 @@ fi
 ln .zshrc ~/.zshrc
 ln .tmux.conf ~/.tmux.conf
 ln .vimrc ~/.vimrc
+ln rc.xml ~/.config/openbox/rc.xml
