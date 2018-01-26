@@ -336,6 +336,7 @@
         <command>scrot</command>
       </action>
     </keybind>
+    <!-- Lock screen on Alt-F2 -->
     <keybind key="A-F2">
       <action name="Execute">
         <execute>bash /home/phil/Documents/pd/scripts/lock.sh </execute>
