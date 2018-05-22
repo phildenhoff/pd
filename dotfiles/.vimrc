@@ -26,7 +26,7 @@ set softtabstop=4
 set expandtab
 
 " Relative number shows relative distances from one spot to another
-set relativenumber
+set number relativenumber
 " undofile creates a file with a history of undoable options
 set undofile
 
