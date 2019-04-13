@@ -12,6 +12,9 @@
       ./entertainment.nix
     ];
 
+  # Enable zsh autocompletion for system packages
+  environment.pathsToLink = [ "/share/zsh" ];
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
