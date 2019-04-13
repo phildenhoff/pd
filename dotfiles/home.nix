@@ -38,6 +38,7 @@
   programs.rofi = {
     enable = true;
     theme = "purple";
+    font = "Inter 14";
   };
 
   programs.vim = {
@@ -85,8 +86,7 @@
     '';
     oh-my-zsh.enable = true;
     oh-my-zsh.plugins = [ "git" "sudo" "zsh-256color" "alias-tips" ];
-    oh-my-zsh.theme = "sunrise";
-    enableAutosuggestions = true;
+    oh-my-zsh.theme = "bira";
     enableCompletion = true;
     shellAliases = {
       grep = "rg";
@@ -100,8 +100,6 @@
 
   programs.tmux = {
     enable = true;
-    newSession = true;
     sensibleOnTop = true;
-    terminal = "screen-256-color";
   };
 }
