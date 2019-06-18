@@ -19,6 +19,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  boot.supportedFilesystems = [ "ntfs" ];
+
   networking.hostName = "casino"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -62,10 +64,13 @@
 
   nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
 
-  fonts.fonts = with pkgs; [
-   noto-fonts-cjk
-   twemoji-color-font
-  ];
+  fonts = {
+    enableFontDir = true;
+    fonts = with pkgs; [
+      noto-fonts-cjk
+      twemoji-color-font
+    ];
+  };
 
   fonts.fontconfig.penultimate.enable = false;
 
@@ -81,7 +86,12 @@
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio = {
+    enable = true;
+    package = pkgs.pulseaudioFull;
+  };
+
+  hardware.bluetooth.enable = true;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;

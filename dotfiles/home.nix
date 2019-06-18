@@ -6,6 +6,7 @@
     feh # simple image viewer
     spotify
     typora
+    discord
   ];
 
   home.sessionVariables = {
@@ -38,7 +39,7 @@
   programs.rofi = {
     enable = true;
     theme = "purple";
-    font = "Inter 14";
+    font = "EmojiOne 14";
   };
 
   programs.vim = {
