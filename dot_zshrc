@@ -97,6 +97,12 @@ alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
 
+# Chezmoi
+alias cmoa='chezmoi add'
+alias ce="chezmoi edit"
+alias cmou="chezmoi update"
+alias cmod="chezmoi diff"
+
 # sekey
 # export PATH=$PATH:/Applications/SeKey.app/Contents/MacOS
 # export SSH_AUTH_SOCK=$HOME/.sekey/ssh-agent.ssh
@@ -261,8 +267,6 @@ load-nvmrc
 export PATH=$ANDROID_HOME/platform-tools:$PATH
 export PATH=$ANDROID_HOME/tools:$PATH
 
-# Add starship to make your prompt ⚡️ fast ⚡️
-eval "$(starship init zsh)"
 export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
 export PATH="/opt/homebrew/lib/ruby/gems/3.0.0/bin/:$PATH"
 
@@ -278,3 +282,8 @@ fi
 
 # Use remote Docker
 #docker context use b52-remote
+#
+
+# Add starship to make your prompt ⚡️ fast ⚡️
+# Must be the last command in this file!
+eval "$(starship init zsh)"
