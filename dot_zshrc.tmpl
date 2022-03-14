@@ -1,20 +1,8 @@
-export ZSH=/Users/phil/.oh-my-zsh
-fpath+=~/.zfunc
-
 # Enable command auto-correction.
 ENABLE_CORRECTION="true"
-
 EDITOR=nvim
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=(
-  git
-  fzf-tab
-)
-
 # Load homebrew autocomplete
-# oh-my-zsh calls compinit, so this has to happen before that
 if type brew &>/dev/null
 then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
@@ -23,34 +11,37 @@ then
   compinit
 fi
 
-source $ZSH/oh-my-zsh.sh
-unalias gl
-
 HISTSIZE=1000000
 SAVEHIST=1000000
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_FIND_NO_DUPS
 
-# ssh
-export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-export PATH=/usr/local/bin:/usr/local/sbin:$HOME/local/bin:$PATH
-
-# Very nice bin!
-export PATH=$PATH:/Users/phil/.local/bin
-
-# Node & NPM
+export PATH=/usr/local/bin:/usr/local/sbin:$HOME/.local/bin:$PATH
+# Include Node in path
 export PATH="$HOME/.npm-packages/bin:$PATH"
+# Add cargo / rust
+export PATH=$PATH:$HOME/.cargo/bin
+# Python
+export PATH="/Users/phil/Library/Python/3.7/bin:/usr/local/opt/python/libexec/bin:$PATH"
+export PATH="$HOME/.poetry/bin:$PATH"
+
+{{- if eq .chezmoi.hostname "mimosa" }}
+# Android
+export ANDROID_HOME=/Users/phil/Library/Android/sdk
+export PATH=$ANDROID_HOME/platform-tools:$PATH
+export PATH=$ANDROID_HOME/tools:$PATH
+
+# Ruby
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export PATH="/opt/homebrew/lib/ruby/gems/3.0.0/bin/:$PATH"
+{{- end }}
+
 
 # bindkey -v
 export KEYTIMEOUT=1
 
-#function zle-line-init zle-keymap-select {
-#    VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]% %{$reset_color%}"
-#    RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/} $EPS1"
-#    zle reset-prompt
-#}
-#RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}$EPS1"
+
 zle -N zle-line-init
 zle -N zle-keymap-select
 
@@ -58,24 +49,51 @@ zle -N zle-keymap-select
 bindkey "^[[1;3C" forward-word
 bindkey "^[[1;3D" backward-word
 
-# Add cargo / rust
-export PATH=$PATH:$HOME/.cargo/bin
 
+{{- if eq .chezmoi.hostname "mimosa" }}
 # Johnny Decimal
 cjdfunction() {
     # {1} is the number to search for
     pushd ~/Dropbox/*/*/${1}*
 }
 alias cjd=cjdfunction
+{{- end }}
+
 
 alias vim=nvim
 alias v=nvim
+
+{{- if eq .chezmoi.os "darwin" }}
+# macOS-aliases
 alias nv="~/Applications/Neovide.app/Contents/MacOS/neovide --multigrid"
 
 # Open Finder in the current dir
 alias here="open ."
 
+[ -f "~/Library/Application Support/fzf/fzf.zsh" ] && source "~/Library/Application Support/fzf/fzf.zsh"
+
+# secretive
+export SSH_AUTH_SOCK=/Users/phil/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+
+# Stop autocorrecting 'docker' to '.docker'
+unsetopt correct_all
+
+# GoFetch asdf
+. /usr/local/opt/asdf/asdf.sh
+. $(brew --prefix asdf)/asdf.sh
+. $(brew --prefix asdf)/etc/bash_completion.d/asdf.bash
+
+# Setting PATH for Python 3.8
+export PATH="/Library/Frameworks/Python.framework/Versions/3.8/bin:${PATH}"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.poetry/bin:$PATH"
+. /opt/homebrew/opt/asdf/asdf.sh
+{{- end }}
+
 # Better git aliases
+alias gd="git diff"
+alias ga="git add"
+alias gc="git commit"
 alias gulr="git pull --rebase"
 alias gul="git pull"
 alias glo="git log --oneline"
@@ -103,68 +121,30 @@ alias ce="chezmoi edit"
 alias cmou="chezmoi update"
 alias cmod="chezmoi diff"
 
-# sekey
-# export PATH=$PATH:/Applications/SeKey.app/Contents/MacOS
-# export SSH_AUTH_SOCK=$HOME/.sekey/ssh-agent.ssh
+# Replace 'find' with 'fd'
+{{- if eq .chezmoi.os "darwin" }}
+alias find="/opt/homebrew/bin/fd"
+alias fd="/opt/homebrew/bin/fd"
+{{- else if eq .chezmoi.os "linux" }}
+ln -s $(which fdfind) ~/.local/bin/fd
+ln -s $(which fdfind) ~/.local/bin/find
+{{- end }}
 
-# python
-export PATH="/Users/phil/Library/Python/3.7/bin:/usr/local/opt/python/libexec/bin:$PATH"
-## and it's younger brother pip
-function _pip_completion {
-  local words cword
-  read -Ac words
-  read -cn cword
-  reply=( $( COMP_WORDS="$words[*]" \
-             COMP_CWORD=$(( cword-1 )) \
-             PIP_AUTO_COMPLETE=1 $words[1] 2>/dev/null ))
-}
-compctl -K _pip_completion pip
+# export PATH="/usr/local/opt/libarchive/bin:$PATH"
 
-export PATH="/usr/local/opt/libarchive/bin:$PATH"
-
-[ -f "~/Library/Application Support/fzf/fzf.zsh" ] && source "~/Library/Application Support/fzf/fzf.zsh"
 
 # add ALL the completions!
 fpath=( ~/.config/zsh/completions $fpath )
 
 # Fix dydlib in Python
-export DYLD_LIBRARY_PATH=/usr/local/opt/openssl/lib:$DYLD_LIBRARY_PATH
-
-# Fd is better than `find`
-alias find="/opt/homebrew/bin/fd"
-alias fd="/opt/homebrew/bin/fd"
-#function fd() {
-#  cd $(find -I -t d  ${#} | fzf)
-  #local dir
-  #dir=$(find ${1:-.} -path '*/\.*' -prune \
-  #                -o -type d -print 2> /dev/null | fzf +m) &&
-  #cd "$dir"
-#}
+#export DYLD_LIBRARY_PATH=/usr/local/opt/openssl/lib:$DYLD_LIBRARY_PATH
 
 
-
-# secretive
-export SSH_AUTH_SOCK=/Users/phil/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
-
-# Stop autocorrecting 'docker' to '.docker'
-unsetopt correct_all
-
-export PATH="$HOME/.poetry/bin:$PATH"
-
-. /usr/local/opt/asdf/asdf.sh
-. $(brew --prefix asdf)/asdf.sh
-. $(brew --prefix asdf)/etc/bash_completion.d/asdf.bash
-
-
-# Setting PATH for Python 3.8
-export PATH="/Library/Frameworks/Python.framework/Versions/3.8/bin:${PATH}"
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/.poetry/bin:$PATH"
-. /opt/homebrew/opt/asdf/asdf.sh
-
+{{- if eq .chezmoi.os "darwin" }}
 # Load Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 export PATH="/opt/homebrew/opt/unzip/bin:$PATH"
+{{- end }}
 
 eval "$(direnv hook zsh)"
 
@@ -172,35 +152,13 @@ eval "$(direnv hook zsh)"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
-
 test -e "${HOME}/Library/Application Support/iTerm2/iterm2_shell_integration.zsh" && source "${HOME}/Library/Application Support/iTerm2/iterm2_shell_integration.zsh"
-
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /opt/homebrew/bin/bit bit
 
 # Use custom hypersnazzy colors via Vivid
 export LS_COLORS="$(vivid -m 8-bit generate snazzy)"
 
 # fzf all the things
-## ...starting with Git
-fbr() {
-  if [ $1 ]; then
-    git checkout $1
-    return
-  fi
-
-  local branches branch
-  branches=$(git --no-pager branch -vv) &&
-  branch=$(echo "$branches" | fzf +m) &&
-  git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
-}
-
-# Disabled 'fbr' because it was annoying not being able to tab-complete
-# branch names in the shell
-# alias gco=fbr
-
-## ... and tack on tmux, too!
-
+## TMUX
 tm() {
   [[ -n "$TMUX" ]] && change="switch-client" || change="attach-session"
   if [ $1 ]; then
@@ -232,9 +190,12 @@ vfc() {
   fi
 }
 
+{{- if eq .chezmoi.hostname "mimosa" }}
 ## VS Code (an extension of the Vim ones)
 alias cf="EDITOR=code vf"
 alias cfc="EDITOR=code vfc"
+{{- end }}
+
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
@@ -262,27 +223,21 @@ load-nvmrc() {
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 
-  # Android
-  export ANDROID_HOME=/Users/phil/Library/Android/sdk
-export PATH=$ANDROID_HOME/platform-tools:$PATH
-export PATH=$ANDROID_HOME/tools:$PATH
-
-export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-export PATH="/opt/homebrew/lib/ruby/gems/3.0.0/bin/:$PATH"
-
 # Add GT completions
 source $HOME/.config/zsh/completions/gt.zsh
 
 
+{{- if eq .chezmoi.hostname "mimosa" }}
 # Nix
 if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
   . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
 fi
-# End Nix
+{{- end }}
 
+{{- if eq .chezmoi.hostname "mimosa" }}
 # Use remote Docker
-#docker context use b52-remote
-#
+docker context use b52-remote
+{{- end }}
 
 # Add starship to make your prompt ⚡️ fast ⚡️
 # Must be the last command in this file!
