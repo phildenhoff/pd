@@ -8,9 +8,13 @@
     clean = git-lfs clean -- %f
 [core]
     # editor = code --wait
+{{- if eq .chezmoi.os "darwin" }}
     editor = ~/Applications/Neovide.app/Contents/MacOS/neovide --multigrid --nofork
+{{- else if eq .chezmoi.os "linux" }}
+    editor = vim
+{{- end }}
     pager = delta
-	  excludesFile = ~/.gitignore
+    excludesFile = ~/.gitignore
 [init]
     defaultBranch = main
 [interactive]
