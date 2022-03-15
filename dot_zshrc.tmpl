@@ -275,6 +275,12 @@ fi
 docker context use b52-remote
 {{- end }}
 
+# Make editing my ZSHRC and Vim init.vim easier.
+alias vz="chezmoi edit ~/.zshrc && chezmoi apply && source ~/.zshrc"
+alias vv="chezmoi edit ~/.config/nvim/init.vim && chezmoi apply"
+
+source /home/phil/.iterm2_shell_integration.zsh
+
 # Add starship to make your prompt ⚡️ fast ⚡️
 # Must be the last command in this file!
 eval "$(starship init zsh)"
