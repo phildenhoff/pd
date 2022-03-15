@@ -16,6 +16,7 @@ HISTSIZE=1000000
 SAVEHIST=1000000
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_FIND_NO_DUPS
+setopt autocd
 
 export PAGER=less
 export LESS=-R
@@ -97,7 +98,8 @@ export PATH="$HOME/.poetry/bin:$PATH"
 
 # Better git aliases
 alias gd="git diff"
-alias gds="git diff"
+alias gco="git checkout"
+alias gds="git diff --staged"
 alias ga="git add"
 alias gc="git commit"
 alias gst="git status"
