@@ -20,10 +20,6 @@ set colorcolumn=80
 " Font
 set guifont=FiraCode\ Nerd\ Font:h14
 
-""""""
-" >> Text, tab, etc <<
-""""""
-
 " Spaces, not tabs
 set expandtab
 set smarttab
@@ -31,21 +27,13 @@ set smarttab
 set shiftwidth=2
 set tabstop=2
 
-" Remove any trailing whitespace that is in the file
+" Remove trailing whitespaces on save
 autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
 " Incremental searching
 set incsearch
-
 " Highlight search terms
 set hlsearch
-
-set rtp+=/opt/homebrew/opt/fzf
-
-" TODO: Remove
-" NERDTree stuff
-" autocmd VimEnter * NERDTree | wincmd p
-
 
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 "If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
@@ -322,10 +310,6 @@ nnoremap <leader>gs <cmd>Telescope git_status<cr>
 
 set noshowmode
 "autocmd BufWinEnter * NERDTreeMirror
-
-" set listchars=tab:>-<,space:·
-" set list
-source ~/.config/nvim/plugins/goyo.vim
 
 " Disable lspconfig messages from notifying us
 " This prevents "Autostart for <> failed" messages
