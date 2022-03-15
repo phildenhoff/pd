@@ -126,8 +126,8 @@ alias cmod="chezmoi diff"
 alias find="/opt/homebrew/bin/fd"
 alias fd="/opt/homebrew/bin/fd"
 {{- else if eq .chezmoi.os "linux" }}
-ln -s $(which fdfind) ~/.local/bin/fd
-ln -s $(which fdfind) ~/.local/bin/find
+alias find=$(which fdfind)
+alias fd=$(which fdfind)
 {{- end }}
 
 # export PATH="/usr/local/opt/libarchive/bin:$PATH"
@@ -138,9 +138,8 @@ fpath=( ~/.config/zsh/completions $fpath )
 
 # Fix dydlib in Python
 #export DYLD_LIBRARY_PATH=/usr/local/opt/openssl/lib:$DYLD_LIBRARY_PATH
-
-
 {{- if eq .chezmoi.os "darwin" }}
+
 # Load Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 export PATH="/opt/homebrew/opt/unzip/bin:$PATH"
@@ -149,13 +148,16 @@ export PATH="/opt/homebrew/opt/unzip/bin:$PATH"
 eval "$(direnv hook zsh)"
 
 # pyenv
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+if type pyenv &>/dev/null
+then
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+fi
 
 test -e "${HOME}/Library/Application Support/iTerm2/iterm2_shell_integration.zsh" && source "${HOME}/Library/Application Support/iTerm2/iterm2_shell_integration.zsh"
 
 # Use custom hypersnazzy colors via Vivid
-export LS_COLORS="$(vivid -m 8-bit generate snazzy)"
+export LS_COLORS="$(vivid generate snazzy)"
 
 # fzf all the things
 ## TMUX
@@ -198,30 +200,33 @@ alias cfc="EDITOR=code vfc"
 
 
 # NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-# Auto load NVM version on dir entry
-autoload -U add-zsh-hook
-load-nvmrc() {
-  local node_version="$(nvm version)"
-  local nvmrc_path="$(nvm_find_nvmrc)"
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+if [ -s "$NVM_DIR/nvm.sh" ];
+then
+  source "$NVM_DIR/nvm.sh" # This loads nvm
 
-  if [ -n "$nvmrc_path" ]; then
-    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+  # Auto load NVM version on dir entry
+  autoload -U add-zsh-hook
+  load-nvmrc() {
+    local node_version="$(nvm version)"
+    local nvmrc_path="$(nvm_find_nvmrc)"
 
-    if [ "$nvmrc_node_version" = "N/A" ]; then
-      nvm install
-    elif [ "$nvmrc_node_version" != "$node_version" ]; then
-      nvm use
+    if [ -n "$nvmrc_path" ]; then
+      local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+      if [ "$nvmrc_node_version" = "N/A" ]; then
+        nvm install
+      elif [ "$nvmrc_node_version" != "$node_version" ]; then
+        nvm use
+      fi
+    elif [ "$node_version" != "$(nvm version default)" ]; then
+      echo "Reverting to nvm default version"
+      nvm use default
     fi
-  elif [ "$node_version" != "$(nvm version default)" ]; then
-    echo "Reverting to nvm default version"
-    nvm use default
-  fi
-}
-add-zsh-hook chpwd load-nvmrc
-load-nvmrc
+  }
+  add-zsh-hook chpwd load-nvmrc
+  load-nvmrc
+fi
 
 # Add GT completions
 source $HOME/.config/zsh/completions/gt.zsh
