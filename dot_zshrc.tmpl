@@ -95,6 +95,7 @@ export PATH="$HOME/.poetry/bin:$PATH"
 alias gd="git diff"
 alias ga="git add"
 alias gc="git commit"
+alias gst="git status"
 alias gulr="git pull --rebase"
 alias gul="git pull"
 alias glo="git log --oneline"
@@ -117,10 +118,11 @@ alias lla='ls -la'
 alias lt='ls --tree'
 
 # Chezmoi
-alias cmoa='chezmoi add'
-alias ce="chezmoi edit"
-alias cmou="chezmoi update"
-alias cmod="chezmoi diff"
+alias cma='chezmoi add'
+alias cmp='chezmoi apply'
+alias cme="chezmoi edit"
+alias cmu="chezmoi update"
+alias cmd="chezmoi diff"
 
 # Replace 'find' with 'fd'
 {{- if eq .chezmoi.os "darwin" }}
