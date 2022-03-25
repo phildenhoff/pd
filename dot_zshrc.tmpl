@@ -280,6 +280,14 @@ fi
 {{- if eq .chezmoi.hostname "mimosa" }}
 # Use remote Docker
 docker context use b52-remote
+
+{{- if eq .chezmoi.hostname "mimosa" }}
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+# Bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 {{- end }}
 
 # Make editing my ZSHRC and Vim init.vim easier.
