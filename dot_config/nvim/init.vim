@@ -101,6 +101,7 @@ call plug#begin()
   Plug 'wakatime/vim-wakatime'
   Plug 'junegunn/goyo.vim'
   Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-rhubarb'
   Plug 'chipsenkbeil/distant.nvim'
   Plug 'sidebar-nvim/sidebar.nvim'
 call plug#end()
