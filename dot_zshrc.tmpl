@@ -279,7 +279,9 @@ fi
 
 {{- if eq .chezmoi.hostname "mimosa" }}
 # Use remote Docker
-docker context use b52-remote
+# docker context use b52-remote
+{{- end }}
+
 
 {{- if eq .chezmoi.hostname "mimosa" }}
 # bun completions
@@ -294,7 +296,7 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 alias vz="chezmoi edit ~/.zshrc && chezmoi apply && source ~/.zshrc"
 alias vv="chezmoi edit ~/.config/nvim/init.vim && chezmoi apply"
 
-source /home/phil/.iterm2_shell_integration.zsh
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # Add starship to make your prompt ⚡️ fast ⚡️
 # Must be the last command in this file!
