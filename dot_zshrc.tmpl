@@ -46,8 +46,8 @@ export PATH="/opt/homebrew/lib/ruby/gems/3.0.0/bin/:$PATH"
 export KEYTIMEOUT=1
 
 
-zle -N zle-line-init
-zle -N zle-keymap-select
+# zle -N zle-line-init
+# zle -N zle-keymap-select
 
 # Jump words, like in bash
 bindkey "^[[1;3C" forward-word
@@ -84,16 +84,10 @@ export SSH_AUTH_SOCK=/Users/phil/Library/Containers/com.maxgoedjen.Secretive.Sec
 # Stop autocorrecting 'docker' to '.docker'
 unsetopt correct_all
 
-# GoFetch asdf
-. /usr/local/opt/asdf/asdf.sh
-. $(brew --prefix asdf)/asdf.sh
-. $(brew --prefix asdf)/etc/bash_completion.d/asdf.bash
-
 # Setting PATH for Python 3.8
 export PATH="/Library/Frameworks/Python.framework/Versions/3.8/bin:${PATH}"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.poetry/bin:$PATH"
-. /opt/homebrew/opt/asdf/asdf.sh
 {{- end }}
 
 # Better git aliases
