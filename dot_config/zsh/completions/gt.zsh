@@ -3,8 +3,8 @@
 #
 # yargs command completion script
 #
-# Installation: /opt/homebrew/bin/gt completion >> ~/.zshrc
-#    or /opt/homebrew/bin/gt completion >> ~/.zsh_profile on OSX.
+# Installation: gt completion >> ~/.zshrc
+#    or gt completion >> ~/.zsh_profile on OSX.
 #
 _gt_yargs_completions()
 {
