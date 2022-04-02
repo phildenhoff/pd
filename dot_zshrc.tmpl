@@ -1,4 +1,5 @@
 export EDITOR=nvim
+bindkey -e
 
 # Enable command auto-correction.
 ENABLE_CORRECTION="true"
@@ -194,7 +195,7 @@ fi
 test -e "${HOME}/Library/Application Support/iTerm2/iterm2_shell_integration.zsh" && source "${HOME}/Library/Application Support/iTerm2/iterm2_shell_integration.zsh"
 
 # Use custom hypersnazzy colors via Vivid
-export LS_COLORS="$(vivid generate ayu)"
+# export LS_COLORS="$(vivid generate ayu)"
 
 # fzf all the things
 ## TMUX
@@ -279,7 +280,9 @@ fi
 
 {{- if eq .chezmoi.hostname "mimosa" }}
 # Use remote Docker
-# docker context use b52-remote
+#if [[ $(docker context inspect | jq -r ".[0].Name") != "b52-remote" ]]; then
+#  docker context use b52-remote
+#fi
 {{- end }}
 
 
