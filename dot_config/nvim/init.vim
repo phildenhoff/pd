@@ -379,4 +379,33 @@ nnoremap <leader>tn <cmd>colorscheme nightfox<cr>
 nnoremap <leader>tgd <cmd>colorscheme github_light<cr>
 nnoremap <leader>tgn <cmd>colorscheme github_dark<cr>
 
+nnoremap <leader>p <cmd>write<cr> <cmd>! prettier --write %<cr>
+
 nnoremap <C-6> <C-^>
+
+" Make Y act like C or D (from cursor to EOL)
+nnoremap Y y$
+
+" Keep your cursor vertically centered when jumping & merging lines
+" nzz jump & recenter, zv is open folds
+nnoremap n nzzzv
+nnoremap N Nzzzv
+" Mark the spot, join, then jump back
+nnoremap J mzJ`z
+
+" Add undo break points to punctuation
+" Ctrl-g U adds an undo breakpoint
+inoremap , ,<c-g>u
+inoremap . .<c-g>u
+inoremap ! !<c-g>u
+inoremap ? ?<c-g>u
+
+" Move text and re-indent
+" I can't even explain this.
+" https://www.youtube.com/watch?v=hSHATqh8svM
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+inoremap <C-J> <esc>:m .+1<CR>==a
+inoremap <C-K> <esc>:m .-2<CR>==a
+nnoremap <leader>j :m .+1<CR>==
+nnoremap <leader>k :m .-2<CR>==
