@@ -76,42 +76,62 @@ endfunction
 "autocmd BufEnter * call CheckLeftBuffers()
 
 call plug#begin()
+  " Plug 'preservim/nerdtree'
+  Plug 'vifm/vifm.vim'
+  " Plug 'chipsenkbeil/distant.nvim'
+  " ??
+  Plug 'itchyny/lightline.vim'
+  Plug 'junegunn/goyo.vim'
+  " Autocomplete
+  Plug 'hrsh7th/nvim-cmp'
+  Plug 'L3MON4D3/LuaSnip' " Provides snippets. Required by nvim-cmp (or an alt)
+  Plug 'saadparwaiz1/cmp_luasnip' " Required for nvim-cmp
+  Plug 'hrsh7th/cmp-buffer'
+  Plug 'hrsh7th/cmp-path'
+  Plug 'hrsh7th/cmp-nvim-lsp'
+  " Searchability
+  Plug 'nvim-telescope/telescope.nvim'
+  Plug 'rmagatti/session-lens'
+  " IDE features
+  Plug 'sidebar-nvim/sidebar.nvim'
+  " Utilities
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'rmagatti/auto-session'
+  Plug 'github/copilot.vim'
+  Plug 'wakatime/vim-wakatime'
+  " Shortcuts &c.
+  Plug 'tpope/vim-abolish'
+  " Themes
+  Plug 'projekt0n/github-nvim-theme'
+  Plug 'EdenEast/nightfox.nvim'
   Plug 'git@github.com:rakr/vim-one.git'
-  Plug 'preservim/nerdtree'
+  " LSPs & Languages
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'neovim/nvim-lspconfig'
   Plug 'pangloss/vim-javascript'
   Plug 'leafgarland/typescript-vim'
   Plug 'peitalin/vim-jsx-typescript'
   Plug 'maxmellon/vim-jsx-pretty'
-  " Plug 'styled-components/vim-styled-components'
   Plug 'jparise/vim-graphql'
   Plug 'elixir-editors/vim-elixir'
-  Plug 'itchyny/lightline.vim'
-  Plug 'vifm/vifm.vim'
-  Plug 'tpope/vim-abolish'
-  Plug 'neovim/nvim-lspconfig'
-  Plug 'hrsh7th/nvim-compe'
-  Plug 'EdenEast/nightfox.nvim'
-  Plug 'nvim-lua/plenary.nvim'
+  " Colorization
+  Plug 'gko/vim-coloresque'
+  " Git
   Plug 'lewis6991/gitsigns.nvim'
-  Plug 'nvim-lua/plenary.nvim'
-  Plug 'nvim-telescope/telescope.nvim'
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-  Plug 'projekt0n/github-nvim-theme'
-  Plug 'github/copilot.vim'
-  Plug 'wakatime/vim-wakatime'
-  Plug 'junegunn/goyo.vim'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rhubarb'
-  Plug 'chipsenkbeil/distant.nvim'
-  Plug 'sidebar-nvim/sidebar.nvim'
 call plug#end()
 
 " LSP stuff
 lua << EOF
 local nvim_lsp = require('lspconfig')
 
+-- nvim-cmp supports additional completion capabilities
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 vim.o.completeopt = "menuone,noselect"
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -149,6 +169,7 @@ end
 -- Add Deno LSP
 require'lspconfig'.denols.setup{
   on_attach = on_attach,
+  capabilities = capabilities,
   root_dir = nvim_lsp.util.root_pattern("deno.json"),
   init_options = {
     lint = true
@@ -170,6 +191,7 @@ end
 -- Add TS Server
 require'lspconfig'.tsserver.setup{
   on_attach = on_attach,
+  capabilities = capabilities,
   filetypes = {"javascript", "typescript", "typescriptreact", "javascriptreact"},
   root_dir = nvim_lsp.util.root_pattern("package.json"),
   commands = {
@@ -216,83 +238,78 @@ require "lspconfig".efm.setup {
 -- Elixir
 require'lspconfig'.elixirls.setup {
   on_attach = on_attach,
+  capabilities = capabilities,
   root_dir = nvim_lsp.util.root_pattern("mix.exs"),
   cmd = {"/Users/phil/.local/share/elixir-ls/language_server.sh"}
 }
 EOF
 
-" nvim-compe
-lua << EOF
--- Compe setup
-require'compe'.setup {
-  enabled = true;
-  autocomplete = true;
-  debug = false;
-  min_length = 1;
-  preselect = 'enable';
-  throttle_time = 80;
-  source_timeout = 200;
-  incomplete_delay = 400;
-  max_abbr_width = 100;
-  max_kind_width = 100;
-  max_menu_width = 100;
-  documentation = true;
+" nvim-cmp provides autocomplete prompts
+lua <<EOF
 
-  source = {
-    path = true;
-    nvim_lsp = true;
-  };
+-- Set completeopt to have a better completion experience
+vim.o.completeopt = 'menu,menuone,noselect'
+
+-- LuaSnip setup
+local luasnip = require('luasnip')
+
+-- nvim-cmp setup
+local cmp = require('cmp')
+cmp.setup {
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
+  mapping = {
+    -- Tab jumps to the next item in the menu
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        -- Support GitHub copilot tab-completion when there isn't
+        -- a snippet available.
+        local copilot_keys = vim.fn["copilot#Accept"]("")
+          if copilot_keys ~= "" then
+              vim.api.nvim_feedkeys(copilot_keys, "i", true)
+          else
+              fallback()
+          end
+      end
+    end, { "i", "s" }),
+    -- And Shift-Tab jumps back
+    ["<S-Tab>"] = cmp.mapping(function()
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      end
+    end, { "i", "s" }),
+  },
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
+  }, {
+    { name = 'buffer' },
+  })
 }
 
-local t = function(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-local check_back_space = function()
-    local col = vim.fn.col('.') - 1
-    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-        return true
-    else
-        return false
-    end
-end
-
--- Use (s-)tab to:
---- move to prev/next item in completion menuone
---- jump to prev/next snippet's placeholder
-_G.tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t "<C-n>"
-  elseif check_back_space() then
-    return t "<Tab>"
-  else
-    return vim.fn['compe#complete']()
-  end
-end
-_G.s_tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t "<C-p>"
-  else
-    return t "<S-Tab>"
-  end
-end
-
-vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-
---This line is important for auto-import
-vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm("<cr>")', { expr = true })
-vim.api.nvim_set_keymap('i', '<c-space>', 'compe#complete()', { expr = true })
+-- Disable Copilot's defaut tab-takeover
+vim.g.copilot_no_tab_map = true
+vim.g.copilot_assume_mapped = true
+vim.g.copilot_tab_fallback = ""
 EOF
 
 " THEME
 lua << EOF
 -- Enable, but don't use, the github theme
-require('github-theme').setup()
+--require('github-theme').setup()
 
 -- You can change the theme by using :NightfoxLoad <fox>
-require('nightfox').load("dayfox")
+require('nightfox')
+vim.cmd('colorscheme dayfox')
 EOF
 
 lua << EOF
@@ -337,12 +354,27 @@ sidebar.setup({
 })
 EOF
 
+" Auto-session setup
+lua << EOF
+require('auto-session').setup {
+  log_level = 'info',
+  auto_session_suppress_dirs = {'~/'},
+  pre_save_cmds = {"tabdo SidebarNvimClose"},
+  post_save_cmds = {"tabdo SidebarNvimOpen"},
+  post_restore_cmds = {"tabdo SidebarNvimOpen"},
+}
+
+-- Add Session search
+require("telescope").load_extension("session-lens")
+EOF
+
 nnoremap <leader>nve <cmd>tabnew ~/.config/nvim/init.vim<CR>
+" or :so %
 nnoremap <leader>nvs <cmd>source ~/.config/nvim/init.vim<CR>
 
-nnoremap <leader>td <cmd>NightfoxLoad dayfox<cr>
-nnoremap <leader>tu <cmd>NightfoxLoad duskfox<cr>
-nnoremap <leader>tn <cmd>NightfoxLoad nightfox<cr>
+nnoremap <leader>td <cmd>colorscheme dayfox<cr>
+nnoremap <leader>tu <cmd>colorscheme duskfox<cr>
+nnoremap <leader>tn <cmd>colorscheme nightfox<cr>
 
 nnoremap <leader>tgd <cmd>colorscheme github_light<cr>
 nnoremap <leader>tgn <cmd>colorscheme github_dark<cr>
